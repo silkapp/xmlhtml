@@ -11,6 +11,16 @@ import           Text.XmlHtml.Common
 import           Data.Text (Text)
 import qualified Data.Text as T
 
+------------------------------------------------------------------------------
+renderXmlTrimmed :: Encoding -> Maybe DocType -> [Node] -> Builder
+renderXmlTrimmed e dt ns = byteOrder
+       `mappend` xmlDecl e
+       `mappend` docTypeDecl e dt
+       `mappend` nodes
+    where byteOrder | isUTF16 e = fromText e "\xFEFF" -- byte order mark
+                    | otherwise = mempty
+          nodes = mconcat (map (node e) ((reverse . trim . reverse . trim) ns))
+          trim  = dropWhile (\x -> case x of TextNode t | T.all isSpace t -> True; _ -> False)
 
 ------------------------------------------------------------------------------
 render :: Encoding -> Maybe DocType -> [Node] -> Builder

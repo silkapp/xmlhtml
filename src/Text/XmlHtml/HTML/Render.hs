@@ -5,6 +5,7 @@ module Text.XmlHtml.HTML.Render where
 
 import           Blaze.ByteString.Builder
 import           Control.Applicative
+import           Data.Char
 import           Data.Maybe
 import           Data.Monoid
 import qualified Text.Parsec as P
@@ -18,6 +19,15 @@ import           Data.Text (Text)
 import qualified Data.Text as T
 
 import qualified Data.HashSet as S
+
+renderHtmlTrimmed :: Encoding -> Maybe DocType -> [Node] -> Builder
+renderHtmlTrimmed e dt ns = byteOrder
+       `mappend` docTypeDecl e dt
+       `mappend` nodes
+    where byteOrder | isUTF16 e = fromText e "\xFEFF" -- byte order mark
+                    | otherwise = mempty
+          nodes = mconcat (map (node e) ((reverse . trim . reverse . trim) ns))
+          trim  = dropWhile (\x -> case x of TextNode t | T.all isSpace t -> True; _ -> False)
 
 ------------------------------------------------------------------------------
 -- | And, the rendering code.
