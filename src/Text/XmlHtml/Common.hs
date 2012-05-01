@@ -38,6 +38,7 @@ data Document = XmlDocument  {
 -- ought to be semantically interchangeable.
 data Node = TextNode !Text
           | Comment  !Text
+          | Raw      ByteString
           | Element {
                 elementTag      :: !Text,
                 elementAttrs    :: ![(Text, Text)],
@@ -66,6 +67,14 @@ isElement :: Node -> Bool
 isElement (Element _ _ _) = True
 isElement _               = False
 
+------------------------------------------------------------------------------
+-- | Determines whether the node is an a raw text node or not.
+isRaw :: Node -> Bool
+isRaw (Raw _) = True
+isRaw _       = False
+
+rawNode :: ByteString -> Node
+rawNode = Raw
 
 ------------------------------------------------------------------------------
 -- | Gives the tag name of an element, or 'Nothing' if the node isn't an
@@ -103,6 +112,7 @@ setAttribute _    _   n                   = n
 nodeText :: Node -> Text
 nodeText (TextNode t)    = t
 nodeText (Comment _)     = ""
+nodeText (Raw _)         = ""
 nodeText (Element _ _ c) = T.concat (map nodeText c)
 
 

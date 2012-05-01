@@ -38,6 +38,7 @@ module Text.XmlHtml (
     isComment,
     isElement,
     tagName,
+    rawNode,
     getAttribute,
     hasAttribute,
     setAttribute,
