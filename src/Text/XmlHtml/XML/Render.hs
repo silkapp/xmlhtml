@@ -14,7 +14,6 @@ import qualified Data.Text as T
 ------------------------------------------------------------------------------
 renderXmlTrimmed :: Encoding -> Maybe DocType -> [Node] -> Builder
 renderXmlTrimmed e dt ns = byteOrder
-       `mappend` xmlDecl e
        `mappend` docTypeDecl e dt
        `mappend` nodes
     where byteOrder | isUTF16 e = fromText e "\xFEFF" -- byte order mark
