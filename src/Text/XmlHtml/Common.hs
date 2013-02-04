@@ -46,7 +46,6 @@ data Node = TextNode !Text
             }
     deriving (Eq, Show)
 
-
 ------------------------------------------------------------------------------
 -- | Determines whether the node is text or not.
 isTextNode :: Node -> Bool

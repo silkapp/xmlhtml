@@ -58,6 +58,7 @@ module Text.XmlHtml (
 
     -- * Rendering
     render,
+    XMLP.docTypeDecl,
     XML.renderXmlFragment,
     XML.renderXmlTrimmed,
     HTML.renderHtmlFragment,
@@ -70,6 +71,8 @@ import           Data.ByteString (ByteString)
 
 import           Text.XmlHtml.Common
 import           Text.XmlHtml.TextParser
+
+import qualified Text.XmlHtml.XML.Parse as XMLP
 
 import qualified Text.XmlHtml.XML.Parse as XML
 import qualified Text.XmlHtml.XML.Render as XML

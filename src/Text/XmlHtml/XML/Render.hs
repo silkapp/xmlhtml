@@ -31,7 +31,7 @@ render e dt ns = byteOrder
     where byteOrder | isUTF16 e = fromText e "\xFEFF" -- byte order mark
                     | otherwise = mempty
           nodes | null ns   = mempty
-                | otherwise = firstNode e (head ns)
+                | otherwise = node e (head ns)
                     `mappend` (mconcat $ map (node e) (tail ns))
 
 
@@ -41,7 +41,7 @@ render e dt ns = byteOrder
 renderXmlFragment :: Encoding -> [Node] -> Builder
 renderXmlFragment _ []     = mempty
 renderXmlFragment e (n:ns) =
-    firstNode e n `mappend` (mconcat $ map (node e) ns)
+    node e n `mappend` (mconcat $ map (node e) ns)
 
 
 ------------------------------------------------------------------------------

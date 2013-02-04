@@ -38,7 +38,7 @@ render e dt ns = byteOrder
     where byteOrder | isUTF16 e = fromText e "\xFEFF" -- byte order mark
                     | otherwise = mempty
           nodes | null ns   = mempty
-                | otherwise = firstNode e (head ns)
+                | otherwise = node e (head ns)
                     `mappend` (mconcat $ map (node e) (tail ns))
 
 
@@ -48,7 +48,7 @@ render e dt ns = byteOrder
 renderHtmlFragment :: Encoding -> [Node] -> Builder
 renderHtmlFragment _ []     = mempty
 renderHtmlFragment e (n:ns) =
-    firstNode e n `mappend` (mconcat $ map (node e) ns)
+    node e n `mappend` (mconcat $ map (node e) ns)
 
 
 ------------------------------------------------------------------------------
@@ -108,8 +108,9 @@ element e t tb a c
         `mappend` fromText e t
         `mappend` (mconcat $ map (attribute e) a)
         `mappend` fromText e " />"
-    | tb `S.member` voidTags                   =
+{-    | tb `S.member` voidTags                   =
         error $ T.unpack t ++ " must be empty"
+-}
     | tb `S.member` rawTextTags,
       all isTextNode c,
       let s = T.concat (map nodeText c),
