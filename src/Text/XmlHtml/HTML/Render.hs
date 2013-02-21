@@ -79,7 +79,6 @@ node e (Comment t) | "--" `T.isInfixOf`  t = error "Invalid comment"
                    | otherwise             = fromText e "<!--"
                                              `mappend` fromText e t
                                              `mappend` fromText e "-->"
-node _ (Raw t)                             = fromByteString t
 node e (Element t a c)                     =
     let tbase = T.toLower $ snd $ T.breakOnEnd ":" t
     in  element e t tbase a c
@@ -90,7 +89,6 @@ node e (Element t a c)                     =
 -- lets us be sure that @parseHTML@ is a left inverse to @render@.
 firstNode :: Encoding -> Node -> Builder
 firstNode e (Comment t)     = node e (Comment t)
-firstNode e (Raw t)         = node e (Raw t)
 firstNode e (Element t a c) = node e (Element t a c)
 firstNode _ (TextNode "")   = mempty
 firstNode e (TextNode t)    = let (c,t') = fromJust $ T.uncons t
