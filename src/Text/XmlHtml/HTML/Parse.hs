@@ -3,10 +3,12 @@
 
 module Text.XmlHtml.HTML.Parse where
 
+import           Prelude hiding (elem)
 import           Control.Applicative
 import           Control.Monad
 import           Data.Char
-import           Data.List
+import           Data.List hiding (elem)
+import qualified Data.List as L
 import           Data.Maybe
 import           Text.XmlHtml.Common
 import           Text.XmlHtml.HTML.Meta
@@ -372,3 +374,5 @@ finishCharRef = P.char '#' *> (hexCharRef <|> decCharRef)
 finishEntityRef :: Parser Text
 finishEntityRef = XML.name <* P.char ';'
 
+elem :: Eq a => a -> [a] -> Bool
+elem = L.elem
